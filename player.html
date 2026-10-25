@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Player · Cascadia Night Stats</title><link rel="stylesheet" href="style.css">
+<title>Player · Cascadia Stats</title><link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌲</text></svg>">
 </head><body>
 <main>
@@ -34,7 +34,7 @@ renderChrome('player');
 const W=D.wildlife,H=D.habitats;
 let id=new URLSearchParams(location.search).get('p'); if(!D.players[id]) id=ORDER[0];
 const P=D.players[id], c=COLOR(id);
-document.title=`${NAME(id)} · Cascadia Night Stats`;
+document.title=`${NAME(id)} · Cascadia Stats`;
 document.getElementById('chips').innerHTML=ORDER.map(x=>`<a class="chip ${x===id?'active':''} ${D.players[x].main?'':'minor'}" href="?p=${encodeURIComponent(x)}">${esc(NAME(x))}</a>`).join('');
 document.getElementById('title').innerHTML=`<span style="color:${c}">●</span> ${esc(NAME(id))}`;
 document.getElementById('sub').textContent=(P.games>1?`${P.games} games from ${fmtDate(P.first_date,false)} to ${fmtDate(P.last_date,false)}.`:`1 game, on ${fmtDate(P.first_date,false)}.`)+(P.unscored_games.length?` Total unreadable in game #${P.unscored_games.join(', #')}, so score stats use ${P.scored_games} games.`:'');
@@ -73,5 +73,5 @@ const bg=D.games.find(x=>x.no===P.best_game.no), me=bg.players.find(x=>x.id===id
 document.getElementById('bestcard').innerHTML=`<h3>⭐ Best game</h3><div class="big">${me.total}</div>
   <p>${fmtDate(bg.date)} ${approxTag(bg)} · ${me.win?'🏆 won':ord(me.pos)+' of '+bg.n}${me.margin!=null?` (${sgn(me.margin,0)} vs next best)`:''}</p>
   <p class="muted">${W.map(k=>`${ICON[k]} ${me.wildlife[k]??'?'}`).join(' &nbsp;')}<br>${H.map(h=>`${ICON[h]} ${me.habitats[h].corridor??'?'}+${me.habitats[h].bonus??'?'}`).join(' &nbsp;')} &nbsp;${ICON.nature} ${me.nature??'?'}</p>
-  <p><a href="index.html#game-${bg.no}">Open the full scorecard →</a></p>`;
+  <p><a href="log.html#game-${bg.no}">Open the full scorecard →</a></p>`;
 </script></body></html>

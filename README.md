@@ -1,4 +1,4 @@
-# Cascadia Night Stats
+# Cascadia Stats
 
 Public stats site for our home Cascadia board-game group: game log, leaderboard, player pages and insights.
 Plain HTML/CSS/JS with no build step; Chart.js is vendored in `vendor/`.

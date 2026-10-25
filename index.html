@@ -1,67 +1,126 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Game log · Cascadia Night Stats</title><link rel="stylesheet" href="style.css">
+<title>Cascadia Stats · Leaderboard</title><link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌲</text></svg>">
 </head><body>
 <main>
-  <h1>Game log</h1>
-  <p class="lede" id="lede"></p>
-  <div class="toolbar">
-    <label>Show games with <select id="who"><option value="">everyone</option></select></label>
-    <button id="expand">Expand all scorecards</button>
-  </div>
-  <div id="log"></div>
-</main>
-<script src="data.js"></script><script src="common.js"></script>
-<script>
-renderChrome('log');
-const W=D.wildlife, H=D.habitats;
-const who=document.getElementById('who');
-ORDER.forEach(id=>who.insertAdjacentHTML('beforeend',`<option value="${esc(id)}">${esc(NAME(id))} (${D.players[id].games})</option>`));
-const i=D.insights;
-document.getElementById('lede').textContent=`Every game we've scored, newest first: ${i.n_games} games since ${fmtDate(i.date_range[0],false)}. Tap a scorecard to see the full sheet.`;
+  <h1>Leaderboard</h1>
+  <p class="lede">Career numbers for everyone who has played. Tap a column to sort, tap a name for their player page. Ties on total are broken on nature tokens, as in the rules.</p>
+  <div class="tablewrap"><table class="sortable" id="lb"><thead><tr>
+    <th data-k="name" data-t="s">Player</th><th data-k="games" title="Games played">GP</th><th data-k="wins">Wins</th><th data-k="win_pct">Win %</th>
+    <th data-k="avg" title="Career average score">Avg</th><th data-k="best">Best</th><th data-k="worst">Worst</th>
+    <th data-k="avg_pos" data-asc="1" title="Average finishing position (1 = first)">Avg finish</th>
+    <th data-k="avg_margin" title="Average of (your score minus the best other score in that game). Positive = winning by that much.">Avg margin</th>
+  </tr></thead><tbody></tbody></table></div>
+  <p class="legend-note">Avg margin = your score minus the best opponent’s score, averaged over your games. Greyed rows have fewer than 5 games. <span id="unscored"></span></p>
+  <h2>🏆 Wins and average score</h2>
+  <div class="card"><div class="chartbox"><canvas id="c"></canvas></div></div>
 
-function cell(v, note){
-  if(v==null) return `<span class="unk" title="${esc(note||'Unreadable on the paper scorecard')}">?</span>`;
-  return note? `${v}<span class="note-dot" title="${esc('As written: '+note)}">✎</span>` : String(v);
+  <h2 class="section" id="insights">💡 Insights</h2>
+  <p class="lede" id="lede"></p>
+  <div class="grid heads" id="heads"></div>
+
+  <h2>📈 Is the group getting better?</h2>
+  <div class="card"><p id="wtxt"></p><div class="chartbox"><canvas id="wline"></canvas></div></div>
+
+  <h2>🏆 What wins games</h2>
+  <div class="card"><p id="ctxt"></p><div class="chartbox"><canvas id="cbar"></canvas></div>
+    <p class="legend-note">Bars show how many more points winners averaged in each category than everyone else. Small sample (<span id="nw"></span> winning scoresheets), so read these as tendencies, not rules.</p></div>
+
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>👥 Scores by player count</h3><p id="ptxt" style="margin-top:0"></p>
+      <div class="tablewrap"><table id="pc"><thead><tr><th>Players</th><th>Games</th><th>Avg score</th><th>Avg winning score</th></tr></thead><tbody></tbody></table></div></div>
+    <div class="card"><h3>🧮 Where the points come from</h3><p id="comptxt" style="margin-top:0"></p><div class="chartbox sm"><canvas id="comp"></canvas></div></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>🥇 Highest scores ever</h3><div class="tablewrap"><table id="hi"><thead><tr><th>#</th><th>Player</th><th>Score</th><th>Date</th></tr></thead><tbody></tbody></table></div>
+      <h3 style="margin-top:14px">🐾 Biggest single-animal hauls</h3><div class="tablewrap"><table id="cells"><thead><tr><th>Animal</th><th>Player</th><th>Pts</th><th>Date</th></tr></thead><tbody></tbody></table></div></div>
+    <div class="card"><h3>⚔️ Most common rivalries</h3><div class="tablewrap"><table id="riv"><thead><tr><th>Pair</th><th>Games</th><th>Record</th></tr></thead><tbody></tbody></table></div>
+      <h3 style="margin-top:14px">🦊 Animals people skip</h3><p id="zeros" style="margin-top:0"></p></div>
+  </div>
+</main>
+<script src="vendor/chart.umd.min.js"></script><script src="data.js"></script><script src="common.js"></script>
+<script>
+renderChrome('leaderboard');
+{
+
+const rows=Object.values(D.players).map(p=>({...p,name:NAME(p.id)}));
+let sortK='games', asc=false;
+const tb=document.querySelector('#lb tbody');
+function draw(){
+  rows.sort((a,b)=>{const x=a[sortK],y=b[sortK]; let r= typeof x==='string'? x.localeCompare(y) : ((x??-1e9)-(y??-1e9)); if(!asc) r=-r; return r||b.games-a.games||b.avg-a.avg;});
+  tb.innerHTML=rows.map(p=>`<tr class="${p.main?'':'minor'}"><td>${plink(p.id)}</td><td>${p.games}</td><td>${p.wins}</td><td>${fx(p.win_pct,0)}%</td>
+    <td><b>${fx(p.avg)}</b></td><td>${p.best}</td><td>${p.worst}</td><td>${fx(p.avg_pos,2)}</td><td class="${p.avg_margin>0?'up':'down'}">${sgn(p.avg_margin)}</td></tr>`).join('');
+  document.querySelectorAll('#lb th').forEach(th=>{th.className=th.dataset.k===sortK?(asc?'sorted-asc':'sorted-desc'):'';});
 }
-function sheet(g){
-  const ps=g.players, wc=p=>p.win?' class="win-col"':'';
-  const row=(label,f,cls='')=>`<tr class="${cls}"><td>${label}</td>${ps.map(p=>`<td${wc(p)}>${f(p)}</td>`).join('')}</tr>`;
-  const hab=(p,h)=>{const c=p.habitats[h], n=p.notes;
-    return `<span class="hab">${cell(c.corridor,n[h])}<span class="b">+${c.bonus==null?cell(null,n[h+'_bonus']||'Bonus unreadable'):c.bonus}</span></span>`;};
-  let rows=W.map(k=>row(`${ICON[k]} ${LABEL(k)}`,p=>cell(p.wildlife[k],p.notes[k]))).join('');
-  rows+=row('Wildlife',p=>cell(p.w_sub,p.notes.wildlife_subtotal),'sub');
-  rows+=H.map(h=>row(`${ICON[h]} ${LABEL(h)} <span class="muted" style="font-size:.75rem">corridor+bonus</span>`,p=>hab(p,h))).join('');
-  rows+=row('Habitats',p=>cell(p.h_sub,p.notes.habitat_subtotal),'sub');
-  rows+=row(`${ICON.nature} Nature tokens`,p=>cell(p.nature,p.notes.nature));
-  rows+=row('Total',p=>cell(p.total,p.notes.total),'total');
-  return `<div class="tablewrap"><table><thead><tr><th></th>${ps.map(p=>`<th${wc(p)}>${p.win?'🏆 ':''}${plink(p.id)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
+document.querySelectorAll('#lb th').forEach(th=>th.onclick=()=>{const k=th.dataset.k; if(k===sortK) asc=!asc; else {sortK=k; asc=!!(th.dataset.asc||th.dataset.t==='s');} draw();});
+draw();
+const un=Object.values(D.players).filter(p=>p.unscored_games.length);
+if(un.length) document.getElementById('unscored').textContent=un.map(p=>`${NAME(p.id)}'s total in game #${p.unscored_games.join(', #')} is unreadable, so it counts as a game played but not in score stats.`).join(' ');
+const main=ORDER.filter(id=>D.players[id].main);
+new Chart(document.getElementById('c'),{data:{labels:main.map(NAME),datasets:[
+  {type:'bar',label:'Wins',data:main.map(id=>D.players[id].wins),backgroundColor:main.map(id=>COLOR(id)),borderRadius:6,yAxisID:'y'},
+  {type:'bar',label:'Games played',data:main.map(id=>D.players[id].games),backgroundColor:'rgba(139,94,60,.18)',borderRadius:6,yAxisID:'y'},
+  {type:'line',label:'Career avg score',data:main.map(id=>D.players[id].avg),borderColor:'#d9a441',backgroundColor:'#d9a441',pointRadius:6,yAxisID:'y2'}]},
+  options:{scales:{y:{beginAtZero:true,title:{display:true,text:'Games'}},y2:{position:'right',suggestedMin:Math.floor(Math.min(...main.map(id=>D.players[id].avg))-4),suggestedMax:Math.ceil(Math.max(...main.map(id=>D.players[id].avg))+2),grid:{drawOnChartArea:false},title:{display:true,text:'Avg score'}}}}});
 }
-function gameCard(g){
-  const top=Math.max(...g.players.filter(p=>p.total!=null).map(p=>p.total));
-  const ranks=g.players.map(p=>`<div class="rank ${p.win?'win':''}">
-      <div class="pos">${p.win?'🏆':(p.pos?ord(p.pos):'?')}</div>
-      <div><div class="nm">${plink(p.id)}${p.win&&g.tied_on_total?' <span class="pill" title="Tied on total; won on the nature-token tiebreak">won on 🌰 tiebreak</span>':''}</div>
-        <div class="bar-track"><div class="bar-fill" style="width:${p.total==null?0:Math.max(4,(p.total-50)/(top-50)*100)}%"></div></div></div>
-      <div class="sc">${p.total==null?cell(null,'Total unreadable: '+(p.notes.total||'')):p.total}</div></div>`).join('');
-  const notes=g.notes.length?`<div class="game-notes">📝 ${g.notes.map(n=>esc(NAMEIFY(n))).join(' ')}</div>`:'';
-  return `<article class="card game" id="game-${g.no}" data-players="${g.players.map(p=>p.id).join('|')}">
-    <div class="game-head"><span class="game-no">#${g.no}</span><span class="game-date">${fmtDate(g.date)}</span>${approxTag(g)}
-      <span class="game-meta">${g.n} players${g.win_margin!=null?` · won by ${g.win_margin===0?'tiebreak':g.win_margin+' pt'+(g.win_margin===1?'':'s')}`:''}</span></div>
-    <div class="ranks">${ranks}</div>
-    <details class="sheet"><summary>Full scorecard</summary>${sheet(g)}${notes}</details></article>`;
+{
+
+const I=D.insights, W=D.wildlife, H=D.habitats;
+const glink=(no,txt)=>`<a href="log.html#game-${no}">${txt}</a>`;
+document.getElementById('lede').textContent=`Patterns computed from all ${I.n_games} games and ${I.n_rows} scoresheets. Every number here is recalculated whenever the data changes.`;
+const hs=I.highest, bm=I.biggest_margin, ls=I.longest_streak;
+const heads=[
+  ['Highest score ever',hs.score,`${plink(hs.player)} · ${glink(hs.no,fmtDate(hs.date,false))}`],
+  ['Biggest winning margin',bm.margin+' pts',`${plink(bm.winner)} over ${plink(bm.runner_up)} · ${glink(bm.no,fmtDate(bm.date,false))}`],
+  ['Longest win streak',ls.wins+' in a row',`${plink(ls.player)}, consecutive games played`],
+  ['Most wins',I.wins_table[0].wins,`${plink(I.wins_table[0].player)} in ${I.wins_table[0].games} games`],
+  ['Photo finishes',I.closest.length+I.one_point_games,`${I.closest.length} tied on total (won on 🌰 tokens), ${I.one_point_games} won by 1 point`],
+  ['Average score',fx(I.composition.total),`lowest ever ${I.lowest.score} (${plink(I.lowest.player)})`]];
+document.getElementById('heads').innerHTML=heads.map(([k,v,s])=>`<div class="card insight"><div class="k">${k}</div><div class="big">${v}</div><p class="muted" style="font-size:.9rem">${s}</p></div>`).join('');
+
+// winning score over time
+const h=I.win_score_halves, sl=I.win_score_slope_per10, sa=I.avg_score_slope_per10;
+const dir=v=>Math.abs(v)<1.5?'roughly flat':(v>0?'rising':'falling');
+document.getElementById('wtxt').innerHTML=`The winning score averaged <b>${fx(h.first_avg)}</b> in the first ${h.first_n} games and <b>${fx(h.second_avg)}</b> in the last ${h.second_n}. `+
+  `Fitted across all games, the winning score is ${dir(sl)} (${sgn(sl)} per 10 games) and the table-wide average score is ${dir(sa)} (${sgn(sa)} per 10 games).`;
+const ws=I.win_score_series;
+const avgAll=D.games.map(g=>{const t=g.players.filter(p=>p.total!=null).map(p=>p.total);return +(t.reduce((a,b)=>a+b,0)/t.length).toFixed(1);});
+new Chart(document.getElementById('wline'),{type:'line',data:{labels:ws.map(w=>'#'+w.no),datasets:[
+  {label:'Winning score',data:ws.map(w=>w.score),borderColor:'#d9a441',backgroundColor:'#d9a441',tension:.25,pointRadius:4},
+  {label:'Table average',data:avgAll,borderColor:'#2f6f4e',backgroundColor:'#2f6f4e',tension:.25,pointRadius:3,borderDash:[5,4]}]},
+  options:{interaction:{mode:'index',intersect:false},plugins:{tooltip:{callbacks:{title:it=>{const w=ws[it[0].dataIndex];const g=D.games[it[0].dataIndex];return `Game #${w.no} · ${fmtDate(w.date,false)}${g.date_uncertain?' (approx.)':''} · winner ${g.winners.map(NAME).join(', ')}`;}}}},
+  scales:{y:{suggestedMin:70,title:{display:true,text:'Points'}},x:{ticks:{autoSkip:true,maxRotation:0}}}}});
+
+// categories
+const C=I.categories.filter(c=>c.kind!=='nature');
+const byDiff=[...C].sort((a,b)=>b.diff-a.diff);
+const neg=byDiff.filter(c=>c.diff<0);
+document.getElementById('nw').textContent=I.n_games;
+const nm=c=>`${ICON[c.cat]} ${LABEL(c.cat)}`;
+document.getElementById('ctxt').innerHTML=`Winners pull ahead most on <b>${nm(byDiff[0])}</b> (${sgn(byDiff[0].diff)} pts vs the rest of the table) and <b>${nm(byDiff[1])}</b> (${sgn(byDiff[1].diff)}). `+
+  (neg.length?`On ${neg.map(c=>`${nm(c)} (${sgn(c.diff)})`).join(', ')}, winners actually score slightly <i>less</i> than everyone else, so those points don’t separate winners from the rest.`:'');
+new Chart(document.getElementById('cbar'),{type:'bar',data:{labels:byDiff.map(nm),datasets:[{label:'Winners minus rest (avg pts)',data:byDiff.map(c=>c.diff),
+  backgroundColor:byDiff.map(c=>c.diff>=0?(c.kind==='wildlife'?'#6b8f4e':'#3f7f9a'):'#c0703a'),borderRadius:6}]},
+  options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:it=>{const c=byDiff[it.dataIndex];return `winners ${fx(c.win_avg)} vs rest ${fx(c.rest_avg)} (${sgn(c.diff)})`;}}}}}});
+
+// player count
+const pcs=I.by_player_count;
+document.querySelector('#pc tbody').innerHTML=pcs.map(p=>`<tr><td>${p.n}</td><td>${p.games}</td><td>${fx(p.avg_score)}</td><td>${fx(p.avg_win)}</td></tr>`).join('');
+const lowest=[...pcs].sort((a,b)=>a.avg_score-b.avg_score)[0], highest=[...pcs].sort((a,b)=>b.avg_score-a.avg_score)[0];
+document.getElementById('ptxt').innerHTML=`Scores run highest in ${highest.n}-player games (avg ${fx(highest.avg_score)}) and lowest in ${lowest.n}-player games (avg ${fx(lowest.avg_score)}${lowest.games<4?`, only ${lowest.games} games`:''}).`;
+
+// composition
+const cp=I.composition;
+document.getElementById('comptxt').innerHTML=`An average scoresheet is <b>${fx(cp.wildlife)}</b> wildlife + <b>${fx(cp.habitat)}</b> habitat + <b>${fx(cp.nature)}</b> nature tokens. Wildlife is ${fx(100*cp.wildlife/cp.total,0)}% of the score.`;
+new Chart(document.getElementById('comp'),{type:'doughnut',data:{labels:['🐾 Wildlife','🌲 Habitats','🌰 Nature tokens'],datasets:[{data:[cp.wildlife,cp.habitat,cp.nature],backgroundColor:['#6b8f4e','#3f7f9a','#d9a441'],borderColor:'#fffaf0',borderWidth:3}]},options:{plugins:{legend:{position:'bottom'}}}});
+
+// records
+document.querySelector('#hi tbody').innerHTML=I.highest_list.map((r,i)=>`<tr><td>${i+1}</td><td>${plink(r.player)}</td><td><b>${r.score}</b></td><td>${glink(r.no,fmtDate(r.date,false))}</td></tr>`).join('');
+document.querySelector('#cells tbody').innerHTML=I.best_wildlife_cells.map(r=>`<tr><td>${ICON[r.animal]} ${LABEL(r.animal)}</td><td>${plink(r.player)}</td><td><b>${r.pts}</b></td><td>${glink(r.no,fmtDate(r.date,false))}</td></tr>`).join('');
+document.querySelector('#riv tbody').innerHTML=I.rivalries.map(r=>{const lead=r.a_wins===r.b_wins?'even':(r.a_wins>r.b_wins?r.a:r.b);
+  return `<tr><td>${plink(r.a)} vs ${plink(r.b)}</td><td>${r.games}</td><td>${r.a_wins}–${r.b_wins}${r.ties?`–${r.ties}`:''} ${lead==='even'?'<span class="pill">even</span>':`<span class="pill green">${esc(NAME(lead))} leads</span>`}</td></tr>`;}).join('');
+const z=I.categories.filter(c=>c.kind==='wildlife').sort((a,b)=>b.zeros-a.zeros);
+document.getElementById('zeros').innerHTML=`Scoresheets with a zero: ${z.map(c=>`${ICON[c.cat]} ${LABEL(c.cat)} <b>${c.zeros}</b>`).join(' · ')}. ${z[0].zeros>0?`${LABEL(z[0].cat)} is the animal most often abandoned entirely, yet winners average ${fx(z[0].win_avg)} points from it.`:''}`;
 }
-function render(){
-  const f=who.value, games=[...D.games].reverse().filter(g=>!f||g.players.some(p=>p.id===f));
-  let html='', cur=null;
-  const counts={}; games.forEach(g=>{const m=g.date.slice(0,7);counts[m]=(counts[m]||0)+1;});
-  for(const g of games){const m=g.date.slice(0,7);
-    if(m!==cur){cur=m;html+=`<div class="month">${fmtMonth(m)} <small>${counts[m]} game${counts[m]>1?'s':''}</small></div>`;}
-    html+=gameCard(g);}
-  document.getElementById('log').innerHTML=html;
-  if(location.hash){const el=document.querySelector(location.hash); if(el){el.querySelector('details').open=true; el.scrollIntoView({block:'center'});}}
-}
-who.onchange=render; render();
-let open=false;
-document.getElementById('expand').onclick=e=>{open=!open;document.querySelectorAll('details.sheet').forEach(d=>d.open=open);e.target.textContent=open?'Collapse all scorecards':'Expand all scorecards';};
 </script></body></html>

@@ -18,9 +18,9 @@ const plink = id => `<a href="player.html?p=${encodeURIComponent(id)}" style="co
 const ord = n => n+(['th','st','nd','rd'][(n%100-20)%10]||['th','st','nd','rd'][n%100]||'th');
 function approxTag(g){ return g.date_uncertain ? `<span class="pill approx" title="${esc('Written on the scorecard as “'+g.date_raw+'”. '+(g.date_note||''))}">date approx.</span>` : ''; }
 function renderChrome(active){
-  const nav = [['index.html','Game log','log'],['players.html','Players','players'],['player.html','Player page','player'],['insights.html','Insights','insights']];
+  const nav = [['index.html','Leaderboard','leaderboard'],['player.html','Player stats','player'],['log.html','Game log','log']];
   document.body.insertAdjacentHTML('afterbegin', `<header class="site"><div class="bar">
-    <a class="brand" href="index.html"><span class="hex">🌲</span>Cascadia Night Stats</a>
+    <a class="brand" href="index.html"><span class="hex">🌲</span>Cascadia Stats</a>
     <nav class="main">${nav.map(([h,t,k])=>`<a href="${h}" class="${k===active?'active':''}">${t}</a>`).join('')}</nav></div></header>`);
   const i=D.insights;
   document.body.insertAdjacentHTML('beforeend', `<footer>🐻 🦌 🐟 🦅 🦊 &nbsp;Scores were transcribed by hand from photos of our paper scorecards (${i.n_games} games, ${fmtDate(i.date_range[0],false)} to ${fmtDate(i.date_range[1],false)}), so a few digits or dates may be off. Cells shown as <span class="unk">?</span> couldn’t be read.</footer>`);
