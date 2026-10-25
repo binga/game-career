@@ -1,0 +1,77 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Player · Cascadia Night Stats</title><link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌲</text></svg>">
+</head><body>
+<main>
+  <div class="chips" id="chips"></div>
+  <h1 id="title"></h1>
+  <p class="lede" id="sub"></p>
+  <div class="grid stats" id="cards"></div>
+
+  <h2>📈 Score in every game</h2>
+  <div class="card">
+    <div id="trend"></div>
+    <div class="chartbox"><canvas id="line"></canvas></div>
+    <p class="legend-note">Game 1 to game <span id="nG"></span>, in date order. Gold dots are wins. The dashed line is the 5-game rolling average; the straight line is the overall trend (least-squares fit).</p>
+  </div>
+
+  <h2>🐾 Favourite strategy</h2>
+  <p class="lede" id="strat"></p>
+  <div class="grid g2">
+    <div class="card"><h3>Wildlife: average points vs group</h3><div class="chartbox sm"><canvas id="wl"></canvas></div></div>
+    <div class="card"><h3>Habitats: average points (corridor + bonus) vs group</h3><div class="chartbox sm"><canvas id="hb"></canvas></div></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>⚔️ Head-to-head</h3><p class="muted" style="font-size:.85rem;margin:0 0 6px">Who finished higher in games you both played.</p>
+      <div class="tablewrap"><table id="h2h"><thead><tr><th>Opponent</th><th>Games</th><th>Won</th><th>Lost</th><th>Tied</th><th>Record</th></tr></thead><tbody></tbody></table></div></div>
+    <div class="card" id="bestcard"></div>
+  </div>
+</main>
+<script src="vendor/chart.umd.min.js"></script><script src="data.js"></script><script src="common.js"></script>
+<script>
+renderChrome('player');
+const W=D.wildlife,H=D.habitats;
+let id=new URLSearchParams(location.search).get('p'); if(!D.players[id]) id=ORDER[0];
+const P=D.players[id], c=COLOR(id);
+document.title=`${NAME(id)} · Cascadia Night Stats`;
+document.getElementById('chips').innerHTML=ORDER.map(x=>`<a class="chip ${x===id?'active':''} ${D.players[x].main?'':'minor'}" href="?p=${encodeURIComponent(x)}">${esc(NAME(x))}</a>`).join('');
+document.getElementById('title').innerHTML=`<span style="color:${c}">●</span> ${esc(NAME(id))}`;
+document.getElementById('sub').textContent=(P.games>1?`${P.games} games from ${fmtDate(P.first_date,false)} to ${fmtDate(P.last_date,false)}.`:`1 game, on ${fmtDate(P.first_date,false)}.`)+(P.unscored_games.length?` Total unreadable in game #${P.unscored_games.join(', #')}, so score stats use ${P.scored_games} games.`:'');
+const d5=P.last5_avg-P.avg;
+const cards=[['Games',P.games,''],['Wins',P.wins,`${ord(1)}-place finishes`],['Win %',fx(P.win_pct,0)+'%',''],['Career avg',fx(P.avg),'points per game'],
+  ['Best',P.best,`game #${P.best_game.no}`],['Worst',P.worst,`game #${P.worst_game.no}`],
+  [P.scored_games>=5?'Last 5 avg':`Last ${P.scored_games} avg`,fx(P.last5_avg),`<span class="${d5>=0?'up':'down'}">${sgn(d5)} vs career</span>`],['Avg finish',fx(P.avg_pos,2),'1 = first place']];
+document.getElementById('cards').innerHTML=cards.map(([k,v,s])=>`<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join('');
+const tl=P.trend_label, tcls=tl.startsWith('Improving')?'':tl.startsWith('Declining')?'down':'flat';
+document.getElementById('trend').innerHTML=`<span class="trend ${tcls}">${tl.startsWith('Improving')?'↗':tl.startsWith('Declining')?'↘':'→'} ${esc(tl)}</span>`;
+document.getElementById('nG').textContent=P.series.length;
+const S=P.series;
+new Chart(document.getElementById('line'),{type:'line',data:{labels:S.map((s,i)=>'G'+(i+1)),datasets:[
+  {label:'Score',data:S.map(s=>s.score),borderColor:c,backgroundColor:c,tension:.2,pointRadius:S.map(s=>s.win?7:4),
+   pointBackgroundColor:S.map(s=>s.win?'#d9a441':c),pointBorderColor:S.map(s=>s.win?'#8b5e3c':c),borderWidth:2},
+  {label:'5-game rolling avg',data:P.rolling5,borderColor:'#8b5e3c',borderDash:[6,4],pointRadius:0,borderWidth:2,tension:.3},
+  {label:'Trend',data:P.trend_line,borderColor:'rgba(63,127,154,.85)',pointRadius:0,borderWidth:2}]},
+  options:{interaction:{mode:'index',intersect:false},plugins:{tooltip:{callbacks:{title:it=>{const s=S[it[0].dataIndex];return `Game ${it[0].dataIndex+1} (log #${s.no}) · ${fmtDate(s.date,false)}${s.approx?' (approx.)':''}`;},
+    afterTitle:it=>{const s=S[it[0].dataIndex];return `${s.win?'🏆 Won':ord(s.pos)+' of '+s.n}`;}}}},
+   scales:{y:{suggestedMin:70,suggestedMax:110,title:{display:true,text:'Points'}},x:{offset:S.length<3,ticks:{autoSkip:true,maxRotation:0}}}}});
+if(S.length<2){const ch=Chart.getChart('line');ch.data.datasets.splice(1,2);ch.update();}
+// strategy
+const g=D.group;
+const topA=P.top_animals.map(k=>`${ICON[k]} ${LABEL(k)} (${fx(P.wildlife_avg[k])})`).join(' and ');
+const sigA=P.signature_animal, sigH=P.signature_habitat;
+document.getElementById('strat').innerHTML=`Biggest scorers: <b>${topA}</b>; best habitat <b>${ICON[P.top_habitat]} ${LABEL(P.top_habitat)}</b> (${fx(P.habitat_avg[P.top_habitat])}). `+
+  `Compared with the group, the biggest edge is ${ICON[sigA]} ${LABEL(sigA)} (${sgn(P.wildlife_edge[sigA])} pts) and ${ICON[sigH]} ${LABEL(sigH)} (${sgn(P.habitat_edge[sigH])} pts). `+
+  `Average split: ${fx(P.avg_w_sub)} wildlife, ${fx(P.avg_h_sub)} habitat, ${fx(P.avg_nature)} nature tokens.`+(P.games<5?' <i>Small sample, so treat this lightly.</i>':'');
+function bars(el,keys,mine,grp){new Chart(document.getElementById(el),{type:'bar',data:{labels:keys.map(k=>innerWidth<640?[ICON[k],LABEL(k)]:ICON[k]+' '+LABEL(k)),datasets:[
+  {label:NAME(id),data:keys.map(k=>mine[k]),backgroundColor:c,borderRadius:6},
+  {label:'Group avg',data:keys.map(k=>grp[k]),backgroundColor:'rgba(139,94,60,.30)',borderRadius:6}]},options:{scales:{y:{beginAtZero:true},x:{ticks:{maxRotation:0,font:{size:innerWidth<640?10:12}}}}}});}
+bars('wl',W,P.wildlife_avg,g.wildlife); bars('hb',H,P.habitat_avg,g.habitats);
+document.querySelector('#h2h tbody').innerHTML=Object.entries(P.h2h).map(([o,r])=>`<tr><td>${plink(o)}</td><td>${r.games}</td><td>${r.w}</td><td>${r.l}</td><td>${r.t}</td>
+  <td class="${r.w>r.l?'up':r.w<r.l?'down':''}"><b>${r.w>r.l?'Leads':r.w<r.l?'Trails':'Even'}</b></td></tr>`).join('');
+const bg=D.games.find(x=>x.no===P.best_game.no), me=bg.players.find(x=>x.id===id);
+document.getElementById('bestcard').innerHTML=`<h3>⭐ Best game</h3><div class="big">${me.total}</div>
+  <p>${fmtDate(bg.date)} ${approxTag(bg)} · ${me.win?'🏆 won':ord(me.pos)+' of '+bg.n}${me.margin!=null?` (${sgn(me.margin,0)} vs next best)`:''}</p>
+  <p class="muted">${W.map(k=>`${ICON[k]} ${me.wildlife[k]??'?'}`).join(' &nbsp;')}<br>${H.map(h=>`${ICON[h]} ${me.habitats[h].corridor??'?'}+${me.habitats[h].bonus??'?'}`).join(' &nbsp;')} &nbsp;${ICON.nature} ${me.nature??'?'}</p>
+  <p><a href="index.html#game-${bg.no}">Open the full scorecard →</a></p>`;
+</script></body></html>

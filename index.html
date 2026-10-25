@@ -1,0 +1,67 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Game log · Cascadia Night Stats</title><link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌲</text></svg>">
+</head><body>
+<main>
+  <h1>Game log</h1>
+  <p class="lede" id="lede"></p>
+  <div class="toolbar">
+    <label>Show games with <select id="who"><option value="">everyone</option></select></label>
+    <button id="expand">Expand all scorecards</button>
+  </div>
+  <div id="log"></div>
+</main>
+<script src="data.js"></script><script src="common.js"></script>
+<script>
+renderChrome('log');
+const W=D.wildlife, H=D.habitats;
+const who=document.getElementById('who');
+ORDER.forEach(id=>who.insertAdjacentHTML('beforeend',`<option value="${esc(id)}">${esc(NAME(id))} (${D.players[id].games})</option>`));
+const i=D.insights;
+document.getElementById('lede').textContent=`Every game we've scored, newest first: ${i.n_games} games since ${fmtDate(i.date_range[0],false)}. Tap a scorecard to see the full sheet.`;
+
+function cell(v, note){
+  if(v==null) return `<span class="unk" title="${esc(note||'Unreadable on the paper scorecard')}">?</span>`;
+  return note? `${v}<span class="note-dot" title="${esc('As written: '+note)}">✎</span>` : String(v);
+}
+function sheet(g){
+  const ps=g.players, wc=p=>p.win?' class="win-col"':'';
+  const row=(label,f,cls='')=>`<tr class="${cls}"><td>${label}</td>${ps.map(p=>`<td${wc(p)}>${f(p)}</td>`).join('')}</tr>`;
+  const hab=(p,h)=>{const c=p.habitats[h], n=p.notes;
+    return `<span class="hab">${cell(c.corridor,n[h])}<span class="b">+${c.bonus==null?cell(null,n[h+'_bonus']||'Bonus unreadable'):c.bonus}</span></span>`;};
+  let rows=W.map(k=>row(`${ICON[k]} ${LABEL(k)}`,p=>cell(p.wildlife[k],p.notes[k]))).join('');
+  rows+=row('Wildlife',p=>cell(p.w_sub,p.notes.wildlife_subtotal),'sub');
+  rows+=H.map(h=>row(`${ICON[h]} ${LABEL(h)} <span class="muted" style="font-size:.75rem">corridor+bonus</span>`,p=>hab(p,h))).join('');
+  rows+=row('Habitats',p=>cell(p.h_sub,p.notes.habitat_subtotal),'sub');
+  rows+=row(`${ICON.nature} Nature tokens`,p=>cell(p.nature,p.notes.nature));
+  rows+=row('Total',p=>cell(p.total,p.notes.total),'total');
+  return `<div class="tablewrap"><table><thead><tr><th></th>${ps.map(p=>`<th${wc(p)}>${p.win?'🏆 ':''}${plink(p.id)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function gameCard(g){
+  const top=Math.max(...g.players.filter(p=>p.total!=null).map(p=>p.total));
+  const ranks=g.players.map(p=>`<div class="rank ${p.win?'win':''}">
+      <div class="pos">${p.win?'🏆':(p.pos?ord(p.pos):'?')}</div>
+      <div><div class="nm">${plink(p.id)}${p.win&&g.tied_on_total?' <span class="pill" title="Tied on total; won on the nature-token tiebreak">won on 🌰 tiebreak</span>':''}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${p.total==null?0:Math.max(4,(p.total-50)/(top-50)*100)}%"></div></div></div>
+      <div class="sc">${p.total==null?cell(null,'Total unreadable: '+(p.notes.total||'')):p.total}</div></div>`).join('');
+  const notes=g.notes.length?`<div class="game-notes">📝 ${g.notes.map(n=>esc(NAMEIFY(n))).join(' ')}</div>`:'';
+  return `<article class="card game" id="game-${g.no}" data-players="${g.players.map(p=>p.id).join('|')}">
+    <div class="game-head"><span class="game-no">#${g.no}</span><span class="game-date">${fmtDate(g.date)}</span>${approxTag(g)}
+      <span class="game-meta">${g.n} players${g.win_margin!=null?` · won by ${g.win_margin===0?'tiebreak':g.win_margin+' pt'+(g.win_margin===1?'':'s')}`:''}</span></div>
+    <div class="ranks">${ranks}</div>
+    <details class="sheet"><summary>Full scorecard</summary>${sheet(g)}${notes}</details></article>`;
+}
+function render(){
+  const f=who.value, games=[...D.games].reverse().filter(g=>!f||g.players.some(p=>p.id===f));
+  let html='', cur=null;
+  const counts={}; games.forEach(g=>{const m=g.date.slice(0,7);counts[m]=(counts[m]||0)+1;});
+  for(const g of games){const m=g.date.slice(0,7);
+    if(m!==cur){cur=m;html+=`<div class="month">${fmtMonth(m)} <small>${counts[m]} game${counts[m]>1?'s':''}</small></div>`;}
+    html+=gameCard(g);}
+  document.getElementById('log').innerHTML=html;
+  if(location.hash){const el=document.querySelector(location.hash); if(el){el.querySelector('details').open=true; el.scrollIntoView({block:'center'});}}
+}
+who.onchange=render; render();
+let open=false;
+document.getElementById('expand').onclick=e=>{open=!open;document.querySelectorAll('details.sheet').forEach(d=>d.open=open);e.target.textContent=open?'Collapse all scorecards':'Expand all scorecards';};
+</script></body></html>

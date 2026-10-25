@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Players · Cascadia Night Stats</title><link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌲</text></svg>">
+</head><body>
+<main>
+  <h1>Leaderboard</h1>
+  <p class="lede">Career numbers for everyone who has played. Tap a column to sort, tap a name for their player page. Ties on total are broken on nature tokens, as in the rules.</p>
+  <div class="tablewrap"><table class="sortable" id="lb"><thead><tr>
+    <th data-k="name" data-t="s">Player</th><th data-k="games" title="Games played">GP</th><th data-k="wins">Wins</th><th data-k="win_pct">Win %</th>
+    <th data-k="avg" title="Career average score">Avg</th><th data-k="best">Best</th><th data-k="worst">Worst</th>
+    <th data-k="avg_pos" data-asc="1" title="Average finishing position (1 = first)">Avg finish</th>
+    <th data-k="avg_margin" title="Average of (your score minus the best other score in that game). Positive = winning by that much.">Avg margin</th>
+  </tr></thead><tbody></tbody></table></div>
+  <p class="legend-note">Avg margin = your score minus the best opponent’s score, averaged over your games. Greyed rows have fewer than 5 games. <span id="unscored"></span></p>
+  <h2>🏆 Wins and average score</h2>
+  <div class="card"><div class="chartbox"><canvas id="c"></canvas></div></div>
+</main>
+<script src="vendor/chart.umd.min.js"></script><script src="data.js"></script><script src="common.js"></script>
+<script>
+renderChrome('players');
+const rows=Object.values(D.players).map(p=>({...p,name:NAME(p.id)}));
+let sortK='games', asc=false;
+const tb=document.querySelector('#lb tbody');
+function draw(){
+  rows.sort((a,b)=>{const x=a[sortK],y=b[sortK]; let r= typeof x==='string'? x.localeCompare(y) : ((x??-1e9)-(y??-1e9)); if(!asc) r=-r; return r||b.games-a.games||b.avg-a.avg;});
+  tb.innerHTML=rows.map(p=>`<tr class="${p.main?'':'minor'}"><td>${plink(p.id)}</td><td>${p.games}</td><td>${p.wins}</td><td>${fx(p.win_pct,0)}%</td>
+    <td><b>${fx(p.avg)}</b></td><td>${p.best}</td><td>${p.worst}</td><td>${fx(p.avg_pos,2)}</td><td class="${p.avg_margin>0?'up':'down'}">${sgn(p.avg_margin)}</td></tr>`).join('');
+  document.querySelectorAll('#lb th').forEach(th=>{th.className=th.dataset.k===sortK?(asc?'sorted-asc':'sorted-desc'):'';});
+}
+document.querySelectorAll('#lb th').forEach(th=>th.onclick=()=>{const k=th.dataset.k; if(k===sortK) asc=!asc; else {sortK=k; asc=!!(th.dataset.asc||th.dataset.t==='s');} draw();});
+draw();
+const un=Object.values(D.players).filter(p=>p.unscored_games.length);
+if(un.length) document.getElementById('unscored').textContent=un.map(p=>`${NAME(p.id)}'s total in game #${p.unscored_games.join(', #')} is unreadable, so it counts as a game played but not in score stats.`).join(' ');
+const main=ORDER.filter(id=>D.players[id].main);
+new Chart(document.getElementById('c'),{data:{labels:main.map(NAME),datasets:[
+  {type:'bar',label:'Wins',data:main.map(id=>D.players[id].wins),backgroundColor:main.map(id=>COLOR(id)),borderRadius:6,yAxisID:'y'},
+  {type:'bar',label:'Games played',data:main.map(id=>D.players[id].games),backgroundColor:'rgba(139,94,60,.18)',borderRadius:6,yAxisID:'y'},
+  {type:'line',label:'Career avg score',data:main.map(id=>D.players[id].avg),borderColor:'#d9a441',backgroundColor:'#d9a441',pointRadius:6,yAxisID:'y2'}]},
+  options:{scales:{y:{beginAtZero:true,title:{display:true,text:'Games'}},y2:{position:'right',suggestedMin:Math.floor(Math.min(...main.map(id=>D.players[id].avg))-4),suggestedMax:Math.ceil(Math.max(...main.map(id=>D.players[id].avg))+2),grid:{drawOnChartArea:false},title:{display:true,text:'Avg score'}}}}});
+</script></body></html>

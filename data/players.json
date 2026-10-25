@@ -1,0 +1,15 @@
+{
+  "_comment": "Display names keyed by the initials written on the scorecards. Edit the values, then re-run: python3 make_site_data.py",
+  "Ph": "Phani",
+  "Ni": "Nimi",
+  "Sh": "Shyam",
+  "Si": "Sindhu",
+  "Ma": "Maruthi",
+  "Su": "Sunita",
+  "Ri": "Richa",
+  "Ac": "Achyuth",
+  "Ra": "Ram",
+  "Ro": "Rohan",
+  "Pr": "Praveen",
+  "Va": "Varshini"
+}
