@@ -22,6 +22,14 @@
     <div class="card"><h3>Habitats: average points (corridor + bonus) vs group</h3><div class="chartbox sm"><canvas id="hb"></canvas></div></div>
   </div>
 
+  <h2>📊 Category scores</h2>
+  <p class="lede" id="catnote"></p>
+  <div class="grid g2">
+    <div class="card"><h3>🐾 Animals</h3><div class="tablewrap"><table id="catW"><thead><tr><th>Animal</th><th>Avg</th><th>Max</th><th>Games</th><th>vs group</th></tr></thead><tbody></tbody></table></div></div>
+    <div class="card"><h3>🏞️ Habitats (corridor + bonus)</h3><div class="tablewrap"><table id="catH"><thead><tr><th>Habitat</th><th>Avg</th><th>Max</th><th>Games</th><th>vs group</th></tr></thead><tbody></tbody></table></div></div>
+  </div>
+  <p class="legend-note">Avg and Max are per game for that category; habitats count the largest-corridor score plus the majority bonus. Games = games where that cell could be read. ⭐ marks the best average in each table; Max links to the game it came from.</p>
+
   <div class="grid g2" style="margin-top:14px">
     <div class="card"><h3>⚔️ Head-to-head</h3><p class="muted" style="font-size:.85rem;margin:0 0 6px">Who finished higher in games you both played.</p>
       <div class="tablewrap"><table id="h2h"><thead><tr><th>Opponent</th><th>Games</th><th>Won</th><th>Lost</th><th>Tied</th><th>Record</th></tr></thead><tbody></tbody></table></div></div>
@@ -67,6 +75,24 @@ function bars(el,keys,mine,grp){new Chart(document.getElementById(el),{type:'bar
   {label:NAME(id),data:keys.map(k=>mine[k]),backgroundColor:c,borderRadius:6},
   {label:'Group avg',data:keys.map(k=>grp[k]),backgroundColor:'rgba(139,94,60,.30)',borderRadius:6}]},options:{scales:{y:{beginAtZero:true},x:{ticks:{maxRotation:0,font:{size:innerWidth<640?10:12}}}}}});}
 bars('wl',W,P.wildlife_avg,g.wildlife); bars('hb',H,P.habitat_avg,g.habitats);
+// category scores (avg / max per animal and habitat), computed from the per-game scorecards
+{
+  const mine=D.games.map(gm=>({gm,r:gm.players.find(x=>x.id===id)})).filter(x=>x.r);
+  const habVal=r=>h=>{const c=r.habitats[h];return c&&c.corridor!=null&&c.bonus!=null?c.corridor+c.bonus:null;};
+  const stat=(keys,get)=>keys.map(k=>{const v=mine.map(({gm,r})=>({no:gm.no,v:get(r)(k)})).filter(x=>x.v!=null);
+    const mx=v.length?v.reduce((a,b)=>b.v>a.v?b:a):null;
+    return {k,n:v.length,avg:v.length?v.reduce((a,b)=>a+b.v,0)/v.length:null,max:mx?mx.v:null,maxNo:mx?mx.no:null};});
+  const rows=(tb,st,grp)=>{const best=Math.max(...st.filter(s=>s.avg!=null).map(s=>s.avg));
+    document.querySelector(`#${tb} tbody`).innerHTML=st.map(s=>{const top=s.avg!=null&&s.avg===best, e=s.avg==null?null:s.avg-grp[s.k];
+      return `<tr><td${top?' class="win-col"':''}>${ICON[s.k]} ${LABEL(s.k)}${top?' ⭐':''}</td><td${top?' class="win-col"':''}><b>${fx(s.avg)}</b></td>
+      <td>${s.max==null?'–':`<a href="log.html#game-${s.maxNo}" title="Game #${s.maxNo}">${s.max}</a>`}</td><td>${s.n}${s.n<mine.length?'<span class="note-dot" title="Some cells unreadable">●</span>':''}</td>
+      <td class="${e>0?'up':e<0?'down':''}">${sgn(e)}</td></tr>`;}).join('');};
+  const sw=stat(W,r=>k=>r.wildlife[k]), sh=stat(H,habVal);
+  rows('catW',sw,g.wildlife); rows('catH',sh,g.habitats);
+  const gaps=[...sw,...sh].filter(s=>s.n<mine.length);
+  document.getElementById('catnote').innerHTML=`Average and best score in each scoring category across ${mine.length} game${mine.length>1?'s':''}.`+
+    (gaps.length?` ${gaps.map(s=>`${ICON[s.k]} ${LABEL(s.k)}`).join(', ')} use${gaps.length>1?'':'s'} fewer games because a cell on the scorecard couldn’t be read.`:'');
+}
 document.querySelector('#h2h tbody').innerHTML=Object.entries(P.h2h).map(([o,r])=>`<tr><td>${plink(o)}</td><td>${r.games}</td><td>${r.w}</td><td>${r.l}</td><td>${r.t}</td>
   <td class="${r.w>r.l?'up':r.w<r.l?'down':''}"><b>${r.w>r.l?'Leads':r.w<r.l?'Trails':'Even'}</b></td></tr>`).join('');
 const bg=D.games.find(x=>x.no===P.best_game.no), me=bg.players.find(x=>x.id===id);

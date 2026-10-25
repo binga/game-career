@@ -1,6 +1,6 @@
 # Cascadia Stats
 
-Public stats site for our home Cascadia board-game group: game log, leaderboard, player pages and insights.
+Public stats site for our home Cascadia board-game group: leaderboard (with insights), player stats (trend, category averages and maxes per animal and habitat, head-to-head) and the game log.
 Plain HTML/CSS/JS with no build step; Chart.js is vendored in `vendor/`.
 
 ## Update the data
