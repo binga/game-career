@@ -5518,6 +5518,116 @@
     "Ni"
    ],
    "game_no": 33
+  },
+  {
+   "id": "p4-c1r1",
+   "date": "2026-10-27",
+   "date_raw": "27-10-2026",
+   "date_confidence": "clear",
+   "date_prefix_text": null,
+   "source_photo": "photo upload 27 Oct 2026 (single pad)",
+   "grid_position": {
+    "col": 1,
+    "row": 1,
+    "note": "position in the photo as taken (landscape, pads sideways): col 1 = leftmost column of pads, row 1 = top"
+   },
+   "crop": "crops/p4_c1r1.jpg",
+   "num_players": 2,
+   "players": [
+    {
+     "name": "Ni",
+     "wildlife": {
+      "bear": 18,
+      "elk": 13,
+      "salmon": 10,
+      "hawk": 9,
+      "fox": 4
+     },
+     "habitats": {
+      "mountain": {
+       "corridor": 6,
+       "bonus": 0
+      },
+      "forest": {
+       "corridor": 9,
+       "bonus": 2
+      },
+      "prairie": {
+       "corridor": 6,
+       "bonus": 1
+      },
+      "wetland": {
+       "corridor": 6,
+       "bonus": 1
+      },
+      "river": {
+       "corridor": 8,
+       "bonus": 2
+      }
+     },
+     "wildlife_subtotal_written": 54,
+     "wildlife_subtotal_computed": 54,
+     "habitat_corridor_total": 35,
+     "habitat_bonus_total": 6,
+     "habitat_subtotal_written": 41,
+     "habitat_subtotal_computed": 41,
+     "nature_tokens": 0,
+     "total_written": 95,
+     "arithmetic_ok": true
+    },
+    {
+     "name": "Ph",
+     "wildlife": {
+      "bear": 8,
+      "elk": 9,
+      "salmon": 15,
+      "hawk": 6,
+      "fox": 9
+     },
+     "habitats": {
+      "mountain": {
+       "corridor": 9,
+       "bonus": 2
+      },
+      "forest": {
+       "corridor": 6,
+       "bonus": 0
+      },
+      "prairie": {
+       "corridor": 6,
+       "bonus": 1
+      },
+      "wetland": {
+       "corridor": 6,
+       "bonus": 1
+      },
+      "river": {
+       "corridor": 5,
+       "bonus": 0
+      }
+     },
+     "wildlife_subtotal_written": 47,
+     "wildlife_subtotal_computed": 47,
+     "habitat_corridor_total": 32,
+     "habitat_bonus_total": 4,
+     "habitat_subtotal_written": 36,
+     "habitat_subtotal_computed": 36,
+     "nature_tokens": 0,
+     "total_written": 83,
+     "arithmetic_ok": true
+    }
+   ],
+   "winners_by_written_total": [
+    "Ni"
+   ],
+   "notes": [
+    "Single pad from the photo uploaded on 27 Oct 2026."
+   ],
+   "date_best_guess": "2026-10-27",
+   "winner_after_nature_token_tiebreak": [
+    "Ni"
+   ],
+   "game_no": 34
   }
  ]
 }

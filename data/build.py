@@ -155,6 +155,11 @@ g(3,'c1r1','25-10-2026','2026-10-25','clear',[
  P('Ni',[11,23,17,5,6],62,[(4,0),(4,0),(5,1),(9,2),(5,1)],28,1,91)],
  notes=['Single pad from the photo uploaded on 25 Oct 2026.'])
 
+g(4,'c1r1','27-10-2026','2026-10-27','clear',[
+ P('Ni',[18,13,10,9,4],54,[(6,0),(9,2),(6,1),(6,1),(8,2)],41,0,95),
+ P('Ph',[8,9,15,6,9],47,[(9,2),(6,0),(6,1),(6,1),(5,0)],36,0,83)],
+ notes=['Single pad from the photo uploaded on 27 Oct 2026.'])
+
 out=[]
 issues=[]
 for i,gm in enumerate(G):
@@ -182,7 +187,7 @@ for i,gm in enumerate(G):
     tot={p['name']:p['total_written'] for p in players if p['total_written'] is not None}
     mx=max(tot.values()); winners=[n for n,v in tot.items() if v==mx]
     out.append(dict(id=gid,date=gm['iso'],date_raw=gm['date_raw'],date_confidence=gm['date_conf'],date_prefix_text=gm['prefix'],
-        source_photo=['photo1.jpg (c1a15e34….jpg)','photo2.jpg (01M5SFKR….jpg)','photo upload 25 Oct 2026 (single pad)'][gm['photo']-1],
+        source_photo=['photo1.jpg (c1a15e34….jpg)','photo2.jpg (01M5SFKR….jpg)','photo upload 25 Oct 2026 (single pad)','photo upload 27 Oct 2026 (single pad)'][gm['photo']-1],
         grid_position=dict(col=int(gm['pos'][1]),row=int(gm['pos'][3]),note='position in the photo as taken (landscape, pads sideways): col 1 = leftmost column of pads, row 1 = top'),
         crop=f"crops/p{gm['photo']}_{gm['pos']}.jpg", num_players=len(players), players=players,
         winners_by_written_total=winners, notes=gm['notes']))
