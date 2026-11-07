@@ -5628,6 +5628,157 @@
     "Ni"
    ],
    "game_no": 34
+  },
+  {
+   "id": "p5-c1r1",
+   "date": "2026-11-07",
+   "date_raw": "7-11-2026",
+   "date_confidence": "clear",
+   "date_prefix_text": null,
+   "source_photo": "photo upload 7 Nov 2026 (single pad)",
+   "grid_position": {
+    "col": 1,
+    "row": 1,
+    "note": "position in the photo as taken (landscape, pads sideways): col 1 = leftmost column of pads, row 1 = top"
+   },
+   "crop": "crops/p5_c1r1.jpg",
+   "num_players": 3,
+   "players": [
+    {
+     "name": "Ri",
+     "wildlife": {
+      "bear": 4,
+      "elk": 7,
+      "salmon": 14,
+      "hawk": 9,
+      "fox": 12
+     },
+     "habitats": {
+      "mountain": {
+       "corridor": 4,
+       "bonus": 0
+      },
+      "forest": {
+       "corridor": 5,
+       "bonus": 1
+      },
+      "prairie": {
+       "corridor": 7,
+       "bonus": 3
+      },
+      "wetland": {
+       "corridor": 8,
+       "bonus": 3
+      },
+      "river": {
+       "corridor": 4,
+       "bonus": 0
+      }
+     },
+     "wildlife_subtotal_written": 46,
+     "wildlife_subtotal_computed": 46,
+     "habitat_corridor_total": 28,
+     "habitat_bonus_total": 7,
+     "habitat_subtotal_written": 35,
+     "habitat_subtotal_computed": 35,
+     "nature_tokens": 2,
+     "total_written": 83,
+     "arithmetic_ok": true
+    },
+    {
+     "name": "Ph",
+     "wildlife": {
+      "bear": 11,
+      "elk": 9,
+      "salmon": 11,
+      "hawk": 18,
+      "fox": 7
+     },
+     "habitats": {
+      "mountain": {
+       "corridor": 5,
+       "bonus": 1
+      },
+      "forest": {
+       "corridor": 9,
+       "bonus": 3
+      },
+      "prairie": {
+       "corridor": 5,
+       "bonus": 0
+      },
+      "wetland": {
+       "corridor": 4,
+       "bonus": 0
+      },
+      "river": {
+       "corridor": 8,
+       "bonus": 3
+      }
+     },
+     "wildlife_subtotal_written": 56,
+     "wildlife_subtotal_computed": 56,
+     "habitat_corridor_total": 31,
+     "habitat_bonus_total": 7,
+     "habitat_subtotal_written": 38,
+     "habitat_subtotal_computed": 38,
+     "nature_tokens": 0,
+     "total_written": 94,
+     "arithmetic_ok": true
+    },
+    {
+     "name": "Ni",
+     "wildlife": {
+      "bear": 11,
+      "elk": 23,
+      "salmon": 0,
+      "hawk": 3,
+      "fox": 14
+     },
+     "habitats": {
+      "mountain": {
+       "corridor": 10,
+       "bonus": 3
+      },
+      "forest": {
+       "corridor": 4,
+       "bonus": 0
+      },
+      "prairie": {
+       "corridor": 5,
+       "bonus": 0
+      },
+      "wetland": {
+       "corridor": 6,
+       "bonus": 1
+      },
+      "river": {
+       "corridor": 5,
+       "bonus": 1
+      }
+     },
+     "wildlife_subtotal_written": 51,
+     "wildlife_subtotal_computed": 51,
+     "habitat_corridor_total": 30,
+     "habitat_bonus_total": 5,
+     "habitat_subtotal_written": 35,
+     "habitat_subtotal_computed": 35,
+     "nature_tokens": 2,
+     "total_written": 88,
+     "arithmetic_ok": true
+    }
+   ],
+   "winners_by_written_total": [
+    "Ph"
+   ],
+   "notes": [
+    "Single pad from the photo uploaded on 7 Nov 2026."
+   ],
+   "date_best_guess": "2026-11-07",
+   "winner_after_nature_token_tiebreak": [
+    "Ph"
+   ],
+   "game_no": 35
   }
  ]
 }
