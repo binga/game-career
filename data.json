@@ -44,7 +44,7 @@
    "river": 6.93
   },
   "nature": 1.69,
-  "avg_score": 91.54
+  "avg_score": 91.51
  },
  "games": [
   {
@@ -5460,66 +5460,22 @@
    "date_note": "clear",
    "n": 3,
    "winners": [
-    "Ni"
+    "Ri"
    ],
-   "tied_on_total": false,
-   "win_margin": 1,
+   "tied_on_total": true,
+   "win_margin": 0,
    "notes": [
     "Single pad from the photo uploaded on 9 Nov 2026.",
-    "Two subtotals on the card do not match their cells: Ni wildlife written 54 (cells sum to 53) and Ph habitats written 39 (cells sum to 37). Cells are stored as read; the written subtotals and totals (Ph 93, Ri 96, Ni 97) are kept as the official result."
+    "Ph habitat and Ni wildlife subtotals corrected from the card to the cell sums.",
+    "Ri and Ni tied on 96; Cascadia tiebreaker (most nature tokens) favours Ri (3 vs 0)."
    ],
    "players": [
     {
-     "id": "Ni",
-     "total": 97,
-     "pos": 1,
-     "win": true,
-     "margin": 1,
-     "wildlife": {
-      "bear": 4,
-      "elk": 11,
-      "salmon": 12,
-      "hawk": 14,
-      "fox": 12
-     },
-     "habitats": {
-      "mountain": {
-       "corridor": 8,
-       "bonus": 3
-      },
-      "forest": {
-       "corridor": 6,
-       "bonus": 0
-      },
-      "prairie": {
-       "corridor": 6,
-       "bonus": 2
-      },
-      "wetland": {
-       "corridor": 6,
-       "bonus": 1
-      },
-      "river": {
-       "corridor": 8,
-       "bonus": 3
-      }
-     },
-     "w_sub": 54,
-     "h_sub": 43,
-     "nature": 0,
-     "notes": {
-      "wildlife_subtotal": "written 54; wildlife cells sum to 53. Written subtotal and total kept as the official result"
-     },
-     "issues": [
-      "wildlife categories sum to 53, written subtotal 54"
-     ]
-    },
-    {
      "id": "Ri",
      "total": 96,
-     "pos": 2,
-     "win": false,
-     "margin": -1,
+     "pos": 1,
+     "win": true,
+     "margin": 0,
      "wildlife": {
       "bear": 11,
       "elk": 11,
@@ -5556,11 +5512,55 @@
      "issues": []
     },
     {
+     "id": "Ni",
+     "total": 96,
+     "pos": 2,
+     "win": false,
+     "margin": 0,
+     "wildlife": {
+      "bear": 4,
+      "elk": 11,
+      "salmon": 12,
+      "hawk": 14,
+      "fox": 12
+     },
+     "habitats": {
+      "mountain": {
+       "corridor": 8,
+       "bonus": 3
+      },
+      "forest": {
+       "corridor": 6,
+       "bonus": 0
+      },
+      "prairie": {
+       "corridor": 6,
+       "bonus": 2
+      },
+      "wetland": {
+       "corridor": 6,
+       "bonus": 1
+      },
+      "river": {
+       "corridor": 8,
+       "bonus": 3
+      }
+     },
+     "w_sub": 53,
+     "h_sub": 43,
+     "nature": 0,
+     "notes": {
+      "wildlife_subtotal": "written 54; corrected to the cell sum 53 (confirmed by Phani)",
+      "total": "written 97; corrected to 53+43+0 = 96 (confirmed by Phani)"
+     },
+     "issues": []
+    },
+    {
      "id": "Ph",
-     "total": 93,
+     "total": 91,
      "pos": 3,
      "win": false,
-     "margin": -4,
+     "margin": -5,
      "wildlife": {
       "bear": 27,
       "elk": 10,
@@ -5591,14 +5591,13 @@
       }
      },
      "w_sub": 54,
-     "h_sub": 39,
+     "h_sub": 37,
      "nature": 0,
      "notes": {
-      "habitat_subtotal": "written 39; habitat cells sum to 37. Written subtotal and total kept as the official result"
+      "habitat_subtotal": "written 39; corrected to the cell sum 37 (confirmed by Phani)",
+      "total": "written 93; corrected to 54+37+0 = 91 (confirmed by Phani)"
      },
-     "issues": [
-      "habitat cells sum to 37, written subtotal 39"
-     ]
+     "issues": []
     }
    ]
   }
@@ -5611,12 +5610,12 @@
    "scored_games": 35,
    "wins": 16,
    "win_pct": 45.7,
-   "avg": 93.46,
+   "avg": 93.4,
    "best": 108,
    "worst": 79,
    "avg_pos": 1.83,
-   "avg_margin": -1.77,
-   "last5_avg": 90.6,
+   "avg_margin": -1.8,
+   "last5_avg": 90.2,
    "first_date": "2025-12-24",
    "last_date": "2026-11-09",
    "series": [
@@ -5930,7 +5929,7 @@
      "no": 36,
      "date": "2026-11-09",
      "approx": false,
-     "score": 93,
+     "score": 91,
      "pos": 3,
      "n": 3,
      "win": false
@@ -5971,47 +5970,47 @@
     91.4,
     90.2,
     89.4,
-    90.6
+    90.2
    ],
    "trend_line": [
-    93.86,
-    93.84,
-    93.81,
-    93.79,
+    93.97,
+    93.93,
+    93.9,
+    93.87,
+    93.83,
+    93.8,
     93.77,
-    93.74,
-    93.72,
+    93.73,
     93.7,
     93.67,
-    93.65,
-    93.62,
+    93.63,
     93.6,
-    93.58,
-    93.55,
+    93.57,
     93.53,
     93.5,
-    93.48,
-    93.46,
+    93.47,
     93.43,
-    93.41,
-    93.39,
-    93.36,
-    93.34,
-    93.31,
-    93.29,
+    93.4,
+    93.37,
+    93.33,
+    93.3,
     93.27,
-    93.24,
-    93.22,
+    93.23,
     93.2,
     93.17,
-    93.15,
-    93.12,
+    93.13,
     93.1,
-    93.08,
-    93.05
+    93.07,
+    93.03,
+    93.0,
+    92.97,
+    92.93,
+    92.9,
+    92.87,
+    92.83
    ],
-   "slope_per10": -0.24,
-   "trend_label": "Steady (about -0.2 points per 10 games)",
+   "slope_per10": -0.33,
+   "trend_label": "Steady (about -0.3 points per 10 games)",
    "main": true,
    "wildlife_avg": {
     "bear": 10.46,
@@ -6042,7 +6041,7 @@
     "river": 0.61
    },
    "avg_w_sub": 54.4,
-   "avg_h_sub": 37.37,
+   "avg_h_sub": 37.31,
    "avg_nature": 1.69,
    "top_animals": [
     "hawk",
@@ -6473,14 +6472,14 @@
    "name": "Nimi",
    "games": 35,
    "scored_games": 35,
-   "wins": 11,
-   "win_pct": 31.4,
-   "avg": 92.83,
+   "wins": 10,
+   "win_pct": 28.6,
+   "avg": 92.8,
    "best": 105,
    "worst": 75,
-   "avg_pos": 2.0,
-   "avg_margin": -2.54,
-   "last5_avg": 93.2,
+   "avg_pos": 2.03,
+   "avg_margin": -2.57,
+   "last5_avg": 93.0,
    "first_date": "2025-12-24",
    "last_date": "2026-11-09",
    "series": [
@@ -6794,10 +6793,10 @@
      "no": 36,
      "date": "2026-11-09",
      "approx": false,
-     "score": 97,
-     "pos": 1,
+     "score": 96,
+     "pos": 2,
      "n": 3,
-     "win": true
+     "win": false
     }
    ],
    "rolling5": [
@@ -6835,46 +6834,46 @@
     92.8,
     93.6,
     92.8,
-    93.2
+    93.0
    ],
    "trend_line": [
-    90.28,
-    90.43,
-    90.58,
-    90.73,
-    90.88,
-    91.03,
-    91.18,
-    91.33,
-    91.48,
-    91.63,
+    90.33,
+    90.48,
+    90.62,
+    90.77,
+    90.91,
+    91.06,
+    91.2,
+    91.35,
+    91.49,
+    91.64,
     91.78,
     91.93,
-    92.08,
-    92.23,
-    92.38,
-    92.53,
-    92.68,
-    92.83,
-    92.98,
-    93.13,
-    93.28,
-    93.43,
-    93.58,
-    93.73,
-    93.88,
-    94.03,
-    94.18,
-    94.33,
-    94.48,
-    94.63,
-    94.78,
-    94.93,
-    95.08,
-    95.23,
-    95.38
+    92.07,
+    92.22,
+    92.36,
+    92.51,
+    92.65,
+    92.8,
+    92.95,
+    93.09,
+    93.24,
+    93.38,
+    93.53,
+    93.67,
+    93.82,
+    93.96,
+    94.11,
+    94.25,
+    94.4,
+    94.54,
+    94.69,
+    94.83,
+    94.98,
+    95.12,
+    95.27
    ],
-   "slope_per10": 1.5,
+   "slope_per10": 1.45,
    "trend_label": "Steady (about +1.5 points per 10 games)",
    "main": true,
    "wildlife_avg": {
@@ -6905,7 +6904,7 @@
     "wetland": -0.37,
     "river": -0.04
    },
-   "avg_w_sub": 56.43,
+   "avg_w_sub": 56.4,
    "avg_h_sub": 34.43,
    "avg_nature": 1.97,
    "top_animals": [
@@ -6935,8 +6934,8 @@
      "games": 9
     },
     "Ri": {
-     "w": 6,
-     "l": 0,
+     "w": 5,
+     "l": 1,
      "t": 0,
      "games": 6
     },
@@ -7824,13 +7823,13 @@
    "name": "Richa",
    "games": 6,
    "scored_games": 6,
-   "wins": 0,
-   "win_pct": 0.0,
+   "wins": 1,
+   "win_pct": 16.7,
    "avg": 87.83,
    "best": 96,
    "worst": 82,
-   "avg_pos": 3.33,
-   "avg_margin": -9.0,
+   "avg_pos": 3.17,
+   "avg_margin": -8.83,
    "last5_avg": 87.8,
    "first_date": "2026-06-27",
    "last_date": "2026-11-09",
@@ -7885,9 +7884,9 @@
      "date": "2026-11-09",
      "approx": false,
      "score": 96,
-     "pos": 2,
+     "pos": 1,
      "n": 3,
-     "win": false
+     "win": true
     }
    ],
    "rolling5": [
@@ -7955,8 +7954,8 @@
      "games": 6
     },
     "Ni": {
-     "w": 0,
-     "l": 6,
+     "w": 1,
+     "l": 5,
      "t": 0,
      "games": 6
     },
@@ -7977,7 +7976,7 @@
     "no": 36,
     "date": "2026-11-09",
     "score": 96,
-    "pos": 2,
+    "pos": 1,
     "n": 3
    },
    "worst_game": {
@@ -8258,7 +8257,7 @@
    },
    {
     "month": "2026-11",
-    "avg": 95.5,
+    "avg": 95.0,
     "games": 2
    }
   ],
@@ -8266,7 +8265,7 @@
    "first_n": 18,
    "first_avg": 97.5,
    "second_n": 18,
-   "second_avg": 97.11
+   "second_avg": 97.06
   },
   "win_score_series": [
    {
@@ -8447,19 +8446,19 @@
    {
     "no": 36,
     "date": "2026-11-09",
-    "score": 97
+    "score": 96
    }
   ],
-  "win_score_slope_per10": 0.11,
-  "avg_score_slope_per10": 0.86,
+  "win_score_slope_per10": 0.06,
+  "avg_score_slope_per10": 0.82,
   "categories": [
    {
     "cat": "bear",
     "kind": "wildlife",
-    "win_avg": 10.97,
-    "rest_avg": 10.75,
-    "diff": 0.22,
-    "corr_total": 0.33,
+    "win_avg": 11.17,
+    "rest_avg": 10.67,
+    "diff": 0.5,
+    "corr_total": 0.32,
     "zeros": 2,
     "n": 117,
     "max": 27
@@ -8478,10 +8477,10 @@
    {
     "cat": "salmon",
     "kind": "wildlife",
-    "win_avg": 12.53,
-    "rest_avg": 10.53,
-    "diff": 2.0,
-    "corr_total": 0.15,
+    "win_avg": 12.47,
+    "rest_avg": 10.56,
+    "diff": 1.91,
+    "corr_total": 0.16,
     "zeros": 8,
     "n": 117,
     "max": 25
@@ -8489,9 +8488,9 @@
    {
     "cat": "hawk",
     "kind": "wildlife",
-    "win_avg": 12.17,
-    "rest_avg": 12.02,
-    "diff": 0.15,
+    "win_avg": 12.08,
+    "rest_avg": 12.06,
+    "diff": 0.02,
     "corr_total": 0.14,
     "zeros": 3,
     "n": 117,
@@ -8500,9 +8499,9 @@
    {
     "cat": "fox",
     "kind": "wildlife",
-    "win_avg": 9.03,
-    "rest_avg": 9.22,
-    "diff": -0.19,
+    "win_avg": 9.06,
+    "rest_avg": 9.21,
+    "diff": -0.15,
     "corr_total": 0.1,
     "zeros": 1,
     "n": 117,
@@ -8511,9 +8510,9 @@
    {
     "cat": "mountain",
     "kind": "habitat",
-    "win_avg": 6.69,
-    "rest_avg": 6.84,
-    "diff": -0.15,
+    "win_avg": 6.51,
+    "rest_avg": 6.91,
+    "diff": -0.4,
     "corr_total": 0.06,
     "zeros": 0,
     "n": 116,
@@ -8522,9 +8521,9 @@
    {
     "cat": "forest",
     "kind": "habitat",
-    "win_avg": 7.67,
-    "rest_avg": 6.75,
-    "diff": 0.92,
+    "win_avg": 7.75,
+    "rest_avg": 6.72,
+    "diff": 1.03,
     "corr_total": 0.18,
     "zeros": 0,
     "n": 117,
@@ -8533,9 +8532,9 @@
    {
     "cat": "prairie",
     "kind": "habitat",
-    "win_avg": 7.58,
-    "rest_avg": 6.95,
-    "diff": 0.63,
+    "win_avg": 7.5,
+    "rest_avg": 6.99,
+    "diff": 0.51,
     "corr_total": 0.17,
     "zeros": 0,
     "n": 117,
@@ -8544,9 +8543,9 @@
    {
     "cat": "wetland",
     "kind": "habitat",
-    "win_avg": 7.86,
-    "rest_avg": 6.72,
-    "diff": 1.14,
+    "win_avg": 7.97,
+    "rest_avg": 6.67,
+    "diff": 1.3,
     "corr_total": 0.16,
     "zeros": 0,
     "n": 117,
@@ -8555,9 +8554,9 @@
    {
     "cat": "river",
     "kind": "habitat",
-    "win_avg": 7.81,
-    "rest_avg": 6.58,
-    "diff": 1.23,
+    "win_avg": 7.69,
+    "rest_avg": 6.63,
+    "diff": 1.06,
     "corr_total": 0.18,
     "zeros": 0,
     "n": 117,
@@ -8566,10 +8565,10 @@
    {
     "cat": "nature",
     "kind": "nature",
-    "win_avg": 2.28,
-    "rest_avg": 1.43,
-    "diff": 0.85,
-    "corr_total": 0.17,
+    "win_avg": 2.36,
+    "rest_avg": 1.4,
+    "diff": 0.96,
+    "corr_total": 0.18,
     "zeros": 47,
     "n": 117,
     "max": 8
@@ -8585,8 +8584,8 @@
    {
     "n": 3,
     "games": 14,
-    "avg_score": 91.81,
-    "avg_win": 96.71
+    "avg_score": 91.74,
+    "avg_win": 96.64
    },
    {
     "n": 4,
@@ -8676,9 +8675,21 @@
      "Ph",
      "Sh"
     ]
+   },
+   {
+    "no": 36,
+    "date": "2026-11-09",
+    "winners": [
+     "Ri"
+    ],
+    "margin": 0,
+    "players": [
+     "Ri",
+     "Ni"
+    ]
    }
   ],
-  "one_point_games": 6,
+  "one_point_games": 5,
   "best_wildlife_cells": [
    {
     "pts": 29,
@@ -8761,16 +8772,16 @@
     "a": "Ni",
     "b": "Ri",
     "games": 6,
-    "a_wins": 6,
-    "b_wins": 0,
+    "a_wins": 5,
+    "b_wins": 1,
     "ties": 0
    }
   ],
   "composition": {
-   "wildlife": 54.72,
-   "habitat": 35.04,
+   "wildlife": 54.71,
+   "habitat": 35.03,
    "nature": 1.69,
-   "total": 91.54
+   "total": 91.51
   },
   "wins_table": [
    {
@@ -8780,7 +8791,7 @@
    },
    {
     "player": "Ni",
-    "wins": 11,
+    "wins": 10,
     "games": 35
    },
    {
@@ -8792,9 +8803,14 @@
     "player": "Si",
     "wins": 2,
     "games": 9
+   },
+   {
+    "player": "Ri",
+    "wins": 1,
+    "games": 6
    }
   ],
-  "tiebreaks": 2,
+  "tiebreaks": 3,
   "n_games": 36,
   "n_rows": 118,
   "date_range": [
@@ -8811,7 +8827,7 @@
    "Ra": 0,
    "Ro": 0,
    "Su": 0,
-   "Ri": 0,
+   "Ri": 1,
    "Va": 0,
    "Pr": 0
   },

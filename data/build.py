@@ -167,10 +167,10 @@ g(5,'c1r1','7-11-2026','2026-11-07','clear',[
  notes=['Single pad from the photo uploaded on 7 Nov 2026.'])
 
 g(6,'c1r1','9-11-2026','2026-11-09','clear',[
- P('Ph',[27,10,0,11,6],54,[(7,1),(7,2),(6,2),(5,0),(7,0)],39,0,93,raw={'habitat_subtotal':'written 39; habitat cells sum to 37. Written subtotal and total kept as the official result'}),
+ P('Ph',[27,10,0,11,6],54,[(7,1),(7,2),(6,2),(5,0),(7,0)],37,0,91,raw={'habitat_subtotal':'written 39; corrected to the cell sum 37 (confirmed by Phani)','total':'written 93; corrected to 54+37+0 = 91 (confirmed by Phani)'}),
  P('Ri',[11,11,10,11,13],56,[(5,0),(7,2),(5,0),(8,3),(7,0)],37,3,96),
- P('Ni',[4,11,12,14,12],54,[(8,3),(6,0),(6,2),(6,1),(8,3)],43,0,97,raw={'wildlife_subtotal':'written 54; wildlife cells sum to 53. Written subtotal and total kept as the official result'})],
- notes=['Single pad from the photo uploaded on 9 Nov 2026.','Two subtotals on the card do not match their cells: Ni wildlife written 54 (cells sum to 53) and Ph habitats written 39 (cells sum to 37). Cells are stored as read; the written subtotals and totals (Ph 93, Ri 96, Ni 97) are kept as the official result.'])
+ P('Ni',[4,11,12,14,12],53,[(8,3),(6,0),(6,2),(6,1),(8,3)],43,0,96,raw={'wildlife_subtotal':'written 54; corrected to the cell sum 53 (confirmed by Phani)','total':'written 97; corrected to 53+43+0 = 96 (confirmed by Phani)'})],
+ notes=['Single pad from the photo uploaded on 9 Nov 2026.','Ph habitat and Ni wildlife subtotals corrected from the card to the cell sums.','Ri and Ni tied on 96; Cascadia tiebreaker (most nature tokens) favours Ri (3 vs 0).'])
 
 out=[]
 issues=[]

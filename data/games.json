@@ -5830,17 +5830,15 @@
      "wildlife_subtotal_computed": 54,
      "habitat_corridor_total": 32,
      "habitat_bonus_total": 5,
-     "habitat_subtotal_written": 39,
+     "habitat_subtotal_written": 37,
      "habitat_subtotal_computed": 37,
      "nature_tokens": 0,
-     "total_written": 93,
+     "total_written": 91,
      "as_written_notes": {
-      "habitat_subtotal": "written 39; habitat cells sum to 37. Written subtotal and total kept as the official result"
+      "habitat_subtotal": "written 39; corrected to the cell sum 37 (confirmed by Phani)",
+      "total": "written 93; corrected to 54+37+0 = 91 (confirmed by Phani)"
      },
-     "arithmetic_ok": false,
-     "arithmetic_issues": [
-      "habitat cells sum to 37, written subtotal 39"
-     ]
+     "arithmetic_ok": true
     },
     {
      "name": "Ri",
@@ -5914,33 +5912,33 @@
        "bonus": 3
       }
      },
-     "wildlife_subtotal_written": 54,
+     "wildlife_subtotal_written": 53,
      "wildlife_subtotal_computed": 53,
      "habitat_corridor_total": 34,
      "habitat_bonus_total": 9,
      "habitat_subtotal_written": 43,
      "habitat_subtotal_computed": 43,
      "nature_tokens": 0,
-     "total_written": 97,
+     "total_written": 96,
      "as_written_notes": {
-      "wildlife_subtotal": "written 54; wildlife cells sum to 53. Written subtotal and total kept as the official result"
+      "wildlife_subtotal": "written 54; corrected to the cell sum 53 (confirmed by Phani)",
+      "total": "written 97; corrected to 53+43+0 = 96 (confirmed by Phani)"
      },
-     "arithmetic_ok": false,
-     "arithmetic_issues": [
-      "wildlife categories sum to 53, written subtotal 54"
-     ]
+     "arithmetic_ok": true
     }
    ],
    "winners_by_written_total": [
+    "Ri",
     "Ni"
    ],
    "notes": [
     "Single pad from the photo uploaded on 9 Nov 2026.",
-    "Two subtotals on the card do not match their cells: Ni wildlife written 54 (cells sum to 53) and Ph habitats written 39 (cells sum to 37). Cells are stored as read; the written subtotals and totals (Ph 93, Ri 96, Ni 97) are kept as the official result."
+    "Ph habitat and Ni wildlife subtotals corrected from the card to the cell sums.",
+    "Ri and Ni tied on 96; Cascadia tiebreaker (most nature tokens) favours Ri (3 vs 0)."
    ],
    "date_best_guess": "2026-11-09",
    "winner_after_nature_token_tiebreak": [
-    "Ni"
+    "Ri"
    ],
    "game_no": 36
   }
