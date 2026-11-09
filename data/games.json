@@ -5779,6 +5779,170 @@
     "Ph"
    ],
    "game_no": 35
+  },
+  {
+   "id": "p6-c1r1",
+   "date": "2026-11-09",
+   "date_raw": "9-11-2026",
+   "date_confidence": "clear",
+   "date_prefix_text": null,
+   "source_photo": "photo upload 9 Nov 2026 (single pad)",
+   "grid_position": {
+    "col": 1,
+    "row": 1,
+    "note": "position in the photo as taken (landscape, pads sideways): col 1 = leftmost column of pads, row 1 = top"
+   },
+   "crop": "crops/p6_c1r1.jpg",
+   "num_players": 3,
+   "players": [
+    {
+     "name": "Ph",
+     "wildlife": {
+      "bear": 27,
+      "elk": 10,
+      "salmon": 0,
+      "hawk": 11,
+      "fox": 6
+     },
+     "habitats": {
+      "mountain": {
+       "corridor": 7,
+       "bonus": 1
+      },
+      "forest": {
+       "corridor": 7,
+       "bonus": 2
+      },
+      "prairie": {
+       "corridor": 6,
+       "bonus": 2
+      },
+      "wetland": {
+       "corridor": 5,
+       "bonus": 0
+      },
+      "river": {
+       "corridor": 7,
+       "bonus": 0
+      }
+     },
+     "wildlife_subtotal_written": 54,
+     "wildlife_subtotal_computed": 54,
+     "habitat_corridor_total": 32,
+     "habitat_bonus_total": 5,
+     "habitat_subtotal_written": 39,
+     "habitat_subtotal_computed": 37,
+     "nature_tokens": 0,
+     "total_written": 93,
+     "as_written_notes": {
+      "habitat_subtotal": "written 39; habitat cells sum to 37. Written subtotal and total kept as the official result"
+     },
+     "arithmetic_ok": false,
+     "arithmetic_issues": [
+      "habitat cells sum to 37, written subtotal 39"
+     ]
+    },
+    {
+     "name": "Ri",
+     "wildlife": {
+      "bear": 11,
+      "elk": 11,
+      "salmon": 10,
+      "hawk": 11,
+      "fox": 13
+     },
+     "habitats": {
+      "mountain": {
+       "corridor": 5,
+       "bonus": 0
+      },
+      "forest": {
+       "corridor": 7,
+       "bonus": 2
+      },
+      "prairie": {
+       "corridor": 5,
+       "bonus": 0
+      },
+      "wetland": {
+       "corridor": 8,
+       "bonus": 3
+      },
+      "river": {
+       "corridor": 7,
+       "bonus": 0
+      }
+     },
+     "wildlife_subtotal_written": 56,
+     "wildlife_subtotal_computed": 56,
+     "habitat_corridor_total": 32,
+     "habitat_bonus_total": 5,
+     "habitat_subtotal_written": 37,
+     "habitat_subtotal_computed": 37,
+     "nature_tokens": 3,
+     "total_written": 96,
+     "arithmetic_ok": true
+    },
+    {
+     "name": "Ni",
+     "wildlife": {
+      "bear": 4,
+      "elk": 11,
+      "salmon": 12,
+      "hawk": 14,
+      "fox": 12
+     },
+     "habitats": {
+      "mountain": {
+       "corridor": 8,
+       "bonus": 3
+      },
+      "forest": {
+       "corridor": 6,
+       "bonus": 0
+      },
+      "prairie": {
+       "corridor": 6,
+       "bonus": 2
+      },
+      "wetland": {
+       "corridor": 6,
+       "bonus": 1
+      },
+      "river": {
+       "corridor": 8,
+       "bonus": 3
+      }
+     },
+     "wildlife_subtotal_written": 54,
+     "wildlife_subtotal_computed": 53,
+     "habitat_corridor_total": 34,
+     "habitat_bonus_total": 9,
+     "habitat_subtotal_written": 43,
+     "habitat_subtotal_computed": 43,
+     "nature_tokens": 0,
+     "total_written": 97,
+     "as_written_notes": {
+      "wildlife_subtotal": "written 54; wildlife cells sum to 53. Written subtotal and total kept as the official result"
+     },
+     "arithmetic_ok": false,
+     "arithmetic_issues": [
+      "wildlife categories sum to 53, written subtotal 54"
+     ]
+    }
+   ],
+   "winners_by_written_total": [
+    "Ni"
+   ],
+   "notes": [
+    "Single pad from the photo uploaded on 9 Nov 2026.",
+    "Two subtotals on the card do not match their cells: Ni wildlife written 54 (cells sum to 53) and Ph habitats written 39 (cells sum to 37). Cells are stored as read; the written subtotals and totals (Ph 93, Ri 96, Ni 97) are kept as the official result."
+   ],
+   "date_best_guess": "2026-11-09",
+   "winner_after_nature_token_tiebreak": [
+    "Ni"
+   ],
+   "game_no": 36
   }
  ]
 }
